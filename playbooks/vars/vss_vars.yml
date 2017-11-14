@@ -1,0 +1,17 @@
+pan-os: 8.0.3
+Essentials-DG: SVC_1_2
+Advance-DG: SVC_2_2
+Enterprise DG: SVC_3_2
+
+pod:
+  pod1:
+    Template: 1_02
+    Template_Stack: NaaS_SRBHONBG_1_01
+
+  pod2:
+    Template: 2_02
+    Template_Stack: NaaS_SRBHONBG_2_01
+
+  pod3:
+    Template: 3_02
+    Template_Stack: NaaS_SRBHONBG_3_01

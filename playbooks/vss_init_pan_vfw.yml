@@ -1,0 +1,27 @@
+- name: Initial configuration of PAN vFirewall
+  hosts: my-panorama
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Retrieve credentials from ansible-vault
+      include_vars: 'panorama-secrets.yml'
+      no_log: 'yes'
+
+    - name: Check for new virtual firewalls
+      vss_pan_check_for_new_vfw:
+        ip_address: '{{ ip_address }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        api_key: '{{ api_key }}'
+      register: new_devices
+    #- debug: var=new_devices.meta
+
+    - name: Start virtual firewall initial config workflow
+      #include: tasks/vss_initial_q.yml sn={{item}}
+      include: tasks/vss_initial_pan_config.yml sn={{item}}
+      #include: tasks/vss_update_panorama_template.yml sn={{item}}
+      with_items:
+         - "{{ new_devices.meta.retval }}"
+
+    #- debug: var=new_devices.meta
