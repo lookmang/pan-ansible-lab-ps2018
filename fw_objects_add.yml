@@ -1,5 +1,5 @@
 - name: Add some objects to the firewall
-  hosts: my-firewall
+  hosts: firewall01
   connection: local
   gather_facts: False
 
@@ -16,7 +16,7 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      addressobject: 'test-address'
+      addressobject: 'ps-address'
       address: '192.168.100.89/24'
       address_type: 'ip-netmask'
       description: 'This is a test address object'
@@ -27,7 +27,7 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      addressobject: 'test-range'
+      addressobject: 'ps-range'
       address: '192.168.100.100-192.168.100.200'
       address_type: 'ip-range'
       description: 'This is a another test address object'
@@ -38,8 +38,8 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      addressgroup: 'test-address-group'
-      static_value: ['test-address','test-range']
+      addressgroup: 'ps-address-group'
+      static_value: ['ps-address','ps-range']
       description: 'This is a test addressgroup'
       operation: 'add'
 
@@ -48,7 +48,7 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      serviceobject: 'service-xyz'
+      serviceobject: 'service-ps-01'
       protocol: 'tcp'
       destination_port: '8889'
       description: 'This is a test service object'
@@ -59,7 +59,7 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      serviceobject: 'service-abc'
+      serviceobject: 'service-ps-02'
       protocol: 'tcp'
       destination_port: '5000,5001,6000-7000'
       description: 'This is a test service object'
@@ -70,17 +70,7 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      servicegroup: 'test-service-group'
-      services: ['service-abc','service-xyz']
+      servicegroup: 'ps-service-group'
+      services: ['service-ps-01','service-ps-02']
       description: 'This is a test servicegroup'
-      operation: 'add'
-
-  - name: Add a tag to the firewall
-    panos_object:
-      ip_address: '{{ ip_address }}'
-      username: '{{ username }}'
-      password: '{{ password }}'
-      tag_name: 'Test'
-      color: 'orange'
-      description: 'This is test tag'
       operation: 'add'
