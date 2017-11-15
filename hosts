@@ -43,8 +43,8 @@
 ## db-[99:101]-node.example.com
 
 [panoramas]
-panorama01 ip_address=192.168.210.240
+panorama01 ip_address=pano.local
 
 [vfirewalls]
-firewall01 ip_address=192.168.210.65
-firewall02 ip_address=192.168.210.65
+firewall01 ip_address=fw01.local
+firewall02 ip_address=fw02.local
