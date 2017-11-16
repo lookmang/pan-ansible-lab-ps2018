@@ -1,0 +1,51 @@
+- name: Add some security rules to the firewall
+  hosts: firewall01
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: PaloAltoNetworks.paloaltonetworks
+
+  tasks:
+  - name: Grab the credentials from ansible-vault
+    include_vars: 'firewall-secrets.yml'
+    no_log: 'yes'
+
+  - name: Add test rule 1 to the firewall
+    panos_security_rule:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      operation: 'add'
+      rule_name: 'pssummit2018-01'
+      description: 'An Ansible test rule'
+      source_zone: ['inside']
+      destination_zone: ['outside']
+      source_ip: ['ps-address']
+      source_user: ['any']
+      destination_ip: ['any']
+      category: ['any']
+      application: ['any']
+      service: ['service-ps-01']
+      hip_profiles: ['any']
+      action: 'allow'
+
+  - name: Add test rule 2 to the firewall
+    panos_security_rule:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      operation: 'add'
+      rule_name: 'pssummit2018-02'
+      description: 'Another Ansible test rule'
+      source_zone: ['inside']
+      source_ip: ['ps-range']
+      source_user: ['any']
+      hip_profiles: ['any']
+      destination_zone: ['outside']
+      destination_ip: ['any']
+      category: ['any']
+      application: ['any']
+      service: ['service-ps-02']
+      action: 'allow'
+      group_profile: 'default'
