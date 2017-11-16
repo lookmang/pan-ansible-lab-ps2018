@@ -1,5 +1,5 @@
 ==================================
-Palo Alto Networks PS Lab
+PS Lab
 ==================================
 
 Please follow the lab guide
