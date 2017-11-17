@@ -48,4 +48,3 @@
       application: ['any']
       service: ['service-ps-02']
       action: 'allow'
-      group_profile: 'default'
