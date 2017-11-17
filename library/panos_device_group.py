@@ -50,9 +50,11 @@ def main():
     if operation=="assign":
         # If Essentials package, assign SVC_1_2 (Essentials) Device group to the device
         try:
-            xpath_dg="/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/devices",% devicegroup
+            xpath_dg="/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/devices" % devicegroup
             xapi = pan.xapi.PanXapi(
                 hostname=ip_address,
+                api_username=username,
+                api_password=password,
                 api_key=api_key
             )
             xapi.set(xpath=xpath_dg,element='<entry name="%s"></entry>' % dvsn)
@@ -69,6 +71,8 @@ def main():
             xpath_dg="/config/devices/entry[@name='localhost.localdomain']/device-group"
             xapi = pan.xapi.PanXapi(
                 hostname=ip_address,
+                api_username=username,
+                api_password=password,
                 api_key=api_key
             )
             xapi.set(xpath=xpath_dg,element='<entry name="%s"></entry>' % devicegroup )

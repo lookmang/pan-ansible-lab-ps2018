@@ -12,7 +12,7 @@
     no_log: 'yes'
 
   - name: Add a Device group to Panorama
-    panos_object:
+    panos_device_group:
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
