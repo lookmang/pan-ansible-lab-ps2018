@@ -62,7 +62,7 @@ def main():
         except PanXapiError:
             exc = get_exception()
             module.fail_json(msg=exc.message)
-        module.exit_json(changed=changed, msg='Device Group \'%s\' successfully assigned to \'%s\'' % (devicegroup, dvsn) )
+        module.exit_json(changed=True, msg='Device Group \'%s\' successfully assigned to \'%s\'' % (devicegroup, dvsn) )
 
     elif operation == "add":
 
@@ -80,7 +80,7 @@ def main():
         except PanXapiError:
             exc = get_exception()
             module.fail_json(msg=exc.message)
-        module.exit_json(changed=changed, msg='Device Group \'%s\' successfully added ' % devicegroup )
+        module.exit_json(changed=True, msg='Device Group \'%s\' successfully added ' % devicegroup )
 
 
 
