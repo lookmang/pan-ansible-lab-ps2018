@@ -18,3 +18,27 @@
       password: '{{ password }}'
       devicegroup: 'dgpssummit2018'
       operation: 'add'
+
+  - name: Add an address object to Panorama
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      addressobject: 'ps-address'
+      address: '192.168.100.89/24'
+      address_type: 'ip-netmask'
+      description: 'This is a test address object'
+      devicegroup: 'dgpssummit2018'
+      operation: 'add'
+
+  - name: Add another address object to Panorama
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      addressobject: 'test-range'
+      address: '192.168.100.100-192.168.100.200'
+      address_type: 'ps-range'
+      description: 'This is a another test address object'
+      devicegroup: 'dgpssummit2018'
+      operation: 'add'
