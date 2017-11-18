@@ -36,9 +36,73 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      addressobject: 'test-range'
+      addressobject: 'ps-range'
       address: '192.168.100.100-192.168.100.200'
       address_type: 'ps-range'
       description: 'This is a another test address object'
       devicegroup: 'dgpssummit2018'
       operation: 'add'
+
+  - name: Add a service to Panorama
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      serviceobject: 'service-ps'
+      protocol: 'tcp'
+      destination_port: '8889'
+      description: 'This is a test service object'
+      devicegroup: 'dgpssummit2018'
+      operation: 'add'
+
+  - name: Add another service to Panorama
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      serviceobject: 'service-ps2'
+      protocol: 'tcp'
+      destination_port: '5000,5001,6000-7000'
+      description: 'This is a test service object'
+      devicegroup: 'dgpssummit2018'
+      operation: 'add'
+
+  - name: Add test rule 1 to Panorama
+    panos_security_rule:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      operation: 'add'
+      rule_name: 'pssummit2018_1'
+      description: 'An Ansible test rule'
+      source_zone: ['inside']
+      destination_zone: ['outside']
+      source_ip: ['ps-address']
+      source_user: ['any']
+      destination_ip: ['any']
+      category: ['any']
+      application: ['any']
+      service: ['service-ps']
+      hip_profiles: ['any']
+      action: 'allow'
+      devicegroup: 'dgpssummit2018'
+
+  - name: Add test rule 2 to Panorama
+    panos_security_rule:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      operation: 'add'
+      rule_name: 'pssummit2018_1'
+      description: 'Another Ansible test rule'
+      source_zone: ['inside']
+      source_ip: ['ps-range']
+      source_user: ['any']
+      hip_profiles: ['any']
+      destination_zone: ['outside']
+      destination_ip: ['any']
+      category: ['any']
+      application: ['any']
+      service: ['service-ps2']
+      action: 'allow'
+      devicegroup: 'dgpssummit2018'
