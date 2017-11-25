@@ -308,7 +308,7 @@ def main():
 
         if jobid["retval"]!="Error":
             wait_timeout = time.time() + 60*10
-            time.sleep(60)
+            time.sleep(90)
             while True:
                 job_status=ckech_job_status(jobid["Jobid"],ip_address,api_key,username,password)
                 if job_status["status"]=="FIN" and job_status["result"]=="OK":
