@@ -6,6 +6,10 @@
   roles:
     - role: PaloAltoNetworks.paloaltonetworks
 
+  vars:
+    device_serial: '{{ device_serial }}'
+    devicegroup: '{{ devicegroup }}'
+
   tasks:
   - name: Grab the credentials from ansible-vault
     include_vars: 'panorama-secrets.yml'
@@ -16,19 +20,28 @@
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      devicegroup: 'dgpssummit2018'
+      devicegroup: '{{ devicegroup }}'
       operation: 'add'
+
+  - name: Add a Device to Device group in Panorama
+    panos_device_group:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      device_serial: '{{device_serial}}'
+      devicegroup: '{{ devicegroup }}'
+      operation: 'assign'
 
   - name: Add an address object to Panorama
     panos_object:
       ip_address: '{{ ip_address }}'
       username: '{{ username }}'
       password: '{{ password }}'
-      addressobject: 'test-address'
+      addressobject: 'ps-address'
       address: '192.168.100.89/24'
       address_type: 'ip-netmask'
       description: 'This is a test address object'
-      devicegroup: 'dgpssummit2018'
+      devicegroup: '{{ devicegroup }}'
       operation: 'add'
 
   - name: Add another address object to Panorama
@@ -38,9 +51,9 @@
       password: '{{ password }}'
       addressobject: 'ps-range'
       address: '192.168.100.100-192.168.100.200'
-      address_type: 'ps-range'
+      address_type: 'ip-range'
       description: 'This is a another test address object'
-      devicegroup: 'dgpssummit2018'
+      devicegroup: '{{ devicegroup }}'
       operation: 'add'
 
   - name: Add a service to Panorama
@@ -52,7 +65,7 @@
       protocol: 'tcp'
       destination_port: '8889'
       description: 'This is a test service object'
-      devicegroup: 'dgpssummit2018'
+      devicegroup: '{{ devicegroup }}'
       operation: 'add'
 
   - name: Add another service to Panorama
@@ -64,7 +77,7 @@
       protocol: 'tcp'
       destination_port: '5000,5001,6000-7000'
       description: 'This is a test service object'
-      devicegroup: 'dgpssummit2018'
+      devicegroup: '{{ devicegroup }}'
       operation: 'add'
 
   - name: Add test rule 1 to Panorama
@@ -85,7 +98,7 @@
       service: ['service-ps']
       hip_profiles: ['any']
       action: 'allow'
-      devicegroup: 'dgpssummit2018'
+      devicegroup: '{{ devicegroup }}'
 
   - name: Add test rule 2 to Panorama
     panos_security_rule:
@@ -93,7 +106,7 @@
       username: '{{ username }}'
       password: '{{ password }}'
       operation: 'add'
-      rule_name: 'pssummit2018_1'
+      rule_name: 'pssummit2018_2'
       description: 'Another Ansible test rule'
       source_zone: ['inside']
       source_ip: ['ps-range']
@@ -105,4 +118,4 @@
       application: ['any']
       service: ['service-ps2']
       action: 'allow'
-      devicegroup: 'dgpssummit2018'
+      devicegroup: '{{ devicegroup }}'

@@ -48,7 +48,7 @@ def main():
 
 
     if operation=="assign":
-        # If Essentials package, assign SVC_1_2 (Essentials) Device group to the device
+
         try:
             xpath_dg="/config/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='%s']/devices" % devicegroup
             xapi = pan.xapi.PanXapi(
@@ -67,7 +67,7 @@ def main():
     elif operation == "add":
 
         try:
-            #If not Essentials package, create device group with host name of the firewall
+            
             xpath_dg="/config/devices/entry[@name='localhost.localdomain']/device-group"
             xapi = pan.xapi.PanXapi(
                 hostname=ip_address,

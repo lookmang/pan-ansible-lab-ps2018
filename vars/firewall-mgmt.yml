@@ -1,0 +1,9 @@
+dns_server_primary: "4.2.2.2"
+dns_server_secondary: "8.8.8.8"
+panorama_primary: "192.168.1.252"
+panorama_secondary: 
+ntp_server_primary: "1.1.1.5"
+ntp_server_secondary: "1.1.1.6"
+timezone: "US/Central"
+update_server: "updates.paloaltonetworks.com"
+login_banner: "This is a PS Summit Automation lab!! Please sign in with credentials assigned to you!"

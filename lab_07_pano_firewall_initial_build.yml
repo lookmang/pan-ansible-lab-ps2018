@@ -1,0 +1,162 @@
+- name: Add a Device group to Panorama
+  hosts: panorama01
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: PaloAltoNetworks.paloaltonetworks
+
+  vars:
+    device_ip: '{{ device_ip }}'
+    device_username: '{{ device_username }}'
+    device_password: '{{ device_password }}'
+    devicegroup: '{{ devicegroup }}'
+    operation: 'add'
+
+
+  tasks:
+  - name: Grab the credentials from ansible-vault
+    include_vars: 'panorama-secrets.yml'
+    no_log: 'yes'
+
+  - name: set panorama IP
+    panos_mgtconfig:
+      ip_address: "{{ device_ip }}"
+      username: "{{ device_username }}"
+      password: "{{ device_password }}"
+      panorama_primary: "{{ ip_address }}"
+      commit: True
+
+  - name: Get firewall Serial number
+    panos_get_system_info:
+      ip_address: '{{ device_ip }}'
+      username: '{{ device_username }}'
+      password: '{{ device_password }}'
+      system_info: 'serial'
+    register: sysinfo
+  - debug:  var=sysinfo.meta.retval
+
+  - name: Add a Device to Panorama
+    panos_managed_device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      device_ip: '{{ device_ip }}'
+      device_username: '{{ device_username }}'
+      device_password: '{{ device_password }}'
+      device_serial: '{{ sysinfo.meta.retval }}'
+      operation: '{{ operation }}'
+
+  - name: Add a Device group to Panorama
+    panos_device_group:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      devicegroup: '{{ devicegroup }}'
+      operation: 'add'
+
+  - name: Assign Device group to a device
+    panos_device_group:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      device_serial: '{{ sysinfo.meta.retval }}'
+      devicegroup: '{{ devicegroup }}'
+      operation: 'assign'
+
+  - name: Add an address object to Device group
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      addressobject: 'base-address'
+      address: '192.168.100.89/24'
+      address_type: 'ip-netmask'
+      description: 'This is a test address object'
+      devicegroup: '{{ devicegroup }}'
+      operation: 'add'
+
+  - name: Add another address object to Device group
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      addressobject: 'base-range'
+      address: '192.168.100.100-192.168.100.200'
+      address_type: 'ip-range'
+      description: 'This is a another test address object'
+      devicegroup: '{{ devicegroup }}'
+      operation: 'add'
+
+  - name: Add a service to Device group
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      serviceobject: 'service-base'
+      protocol: 'tcp'
+      destination_port: '8889'
+      description: 'This is a test service object'
+      devicegroup: '{{ devicegroup }}'
+      operation: 'add'
+
+  - name: Add another service to Device group
+    panos_object:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      serviceobject: 'service-base2'
+      protocol: 'tcp'
+      destination_port: '5000,5001,6000-7000'
+      description: 'This is a test service object'
+      devicegroup: '{{ devicegroup }}'
+      operation: 'add'
+
+  - name: Add test rule 1 to Device group
+    panos_security_rule:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      operation: 'add'
+      rule_name: 'base_1'
+      description: 'An Ansible test rule'
+      source_zone: ['inside']
+      destination_zone: ['outside']
+      source_ip: ['base-address']
+      source_user: ['any']
+      destination_ip: ['any']
+      category: ['any']
+      application: ['any']
+      service: ['service-base']
+      hip_profiles: ['any']
+      action: 'allow'
+      devicegroup: '{{ devicegroup }}'
+
+  - name: Add test rule 2 to Device group
+    panos_security_rule:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      operation: 'add'
+      rule_name: 'base_2'
+      description: 'Another Ansible test rule'
+      source_zone: ['inside']
+      source_ip: ['base-range']
+      source_user: ['any']
+      hip_profiles: ['any']
+      destination_zone: ['outside']
+      destination_ip: ['any']
+      category: ['any']
+      application: ['any']
+      service: ['service-base2']
+      action: 'allow'
+      devicegroup: '{{ devicegroup }}'
+
+  - name: Push Device group to devcie
+    panos_commit_panorama:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      devicegroup: '{{ devicegroup }}'
+      device_serial: '{{ sysinfo.meta.retval }}'
+      operation: 'devicegroup'

@@ -1,0 +1,30 @@
+- name: Add a Device group to Panorama
+  hosts: panorama01
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: PaloAltoNetworks.paloaltonetworks
+
+  vars:
+    device_ip: '{{ device_ip }}'
+    device_username: '{{ device_username }}'
+    device_password: '{{ device_password }}'
+    device_serial: '{{ device_serial }}'
+    operation: '{{ operation }}'
+
+  tasks:
+  - name: Grab the credentials from ansible-vault
+    include_vars: 'panorama-secrets.yml'
+    no_log: 'yes'
+
+  - name: Add a Device to Panorama
+    panos_managed_device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username }}'
+      password: '{{ password }}'
+      device_ip: '{{ device_ip }}'
+      device_username: '{{ device_username }}'
+      device_password: '{{ device_password }}'
+      device_serial: '{{ device_serial }}'
+      operation: '{{ operation }}'
