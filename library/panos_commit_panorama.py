@@ -226,6 +226,7 @@ def main():
 
         #Commit to Panorama
         panorama_api_req=panorama_commit_api(operation,admin)
+        time.sleep(120)
         jobid=commit(ip_address,api_key,username,password,panorama_api_req["cmd"],panorama_api_req["parameters"])
 
         if jobid["retval"]!="Error":
@@ -252,6 +253,7 @@ def main():
     elif operation=="template":
         # Commit Template
         template_api_req=template_commit_api(template,device_serial)
+        time.sleep(120)
         jobid= commit(ip_address,api_key,username,password,template_api_req["cmd"],template_api_req["parameters"])
 
         if jobid["retval"]!="Error":
@@ -278,6 +280,7 @@ def main():
     elif operation=="template_stack":
         # Commit Template
         template_stack_api_req=template_stack_commit_api(template_stack,device_serial)
+        time.sleep(120)
         jobid= commit(ip_address,api_key,username,password,template_stack_api_req["cmd"],template_stack_api_req["parameters"])
 
         if jobid["retval"]!="Error":
@@ -304,11 +307,12 @@ def main():
     elif operation=="devicegroup":
         # Commit Template
         devicegroup_api_req=devicegroup_commit_api(devicegroup,device_serial)
+        time.sleep(120)
         jobid= commit(ip_address,api_key,username,password,devicegroup_api_req["cmd"],devicegroup_api_req["parameters"])
 
         if jobid["retval"]!="Error":
             wait_timeout = time.time() + 60*10
-            time.sleep(90)
+            time.sleep(60)
             while True:
                 job_status=ckech_job_status(jobid["Jobid"],ip_address,api_key,username,password)
                 if job_status["status"]=="FIN" and job_status["result"]=="OK":
